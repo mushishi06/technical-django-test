@@ -1,4 +1,5 @@
 import json
+import urllib.request
 import os
 
 from django.conf import settings
@@ -11,10 +12,26 @@ class Command(BaseCommand):
     help = "Loads country data from a JSON file."
 
     IMPORT_FILE = os.path.join(settings.BASE_DIR, "..", "data", "countries.json")
+    URL = "https://storage.googleapis.com/dcr-django-test/countries.json"
+
+    # def get_data(self):
+    #     with open(self.IMPORT_FILE) as f:
+    #         data = json.load(f)
+    #     return data
 
     def get_data(self):
-        with open(self.IMPORT_FILE) as f:
-            data = json.load(f)
+        try:
+            json_url = urllib.request.urlopen(self.URL)
+        except Exception as e:
+            self.stdout.write(
+                self.style.ERROR(
+                    "Error fetching data from '{}'.\nError: {}".format(
+                        self.URL, str(e)
+                    )
+                )
+            )
+            return []
+        data = json.loads(json_url.read())
         return data
 
     def handle(self, *args, **options):
