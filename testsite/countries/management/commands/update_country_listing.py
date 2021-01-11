@@ -48,6 +48,8 @@ class Command(BaseCommand):
                     "alpha2Code": row["alpha2Code"],
                     "alpha3Code": row["alpha3Code"],
                     "population": row["population"],
+                    "topLevelDomain": row["topLevelDomain"],
+                    "capital": row["capital"],
                     "region": region,
                 },
             )
